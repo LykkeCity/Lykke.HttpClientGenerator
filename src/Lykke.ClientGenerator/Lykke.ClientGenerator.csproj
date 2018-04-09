@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>7.1</LangVersion>
+        <Version>1.0.0-beta03</Version>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="JetBrains.Annotations" Version="11.1.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0"/>
+        <PackageReference Include="Polly" Version="5.8.0"/>
+        <PackageReference Include="Polly.Caching.MemoryCache" Version="1.0.0"/>
+        <PackageReference Include="Refit" Version="4.2.0"/>
+        <PackageReference Include="System.Collections.Immutable" Version="1.4.0"/>
+        <PackageReference Include="System.Reflection.DispatchProxy" Version="4.4.0"/>
+    </ItemGroup>
+</Project>
