@@ -19,7 +19,7 @@ namespace Lykke.ClientGenerator
     /// To disable caching provide empty callsWrappers.
     /// To disable retries provide null for the retryStrategy.
     /// </remarks>
-    public class ClientProxyGenerator
+    public class ClientProxyGenerator : IClientProxyGenerator
     {
         private readonly string _rootUrl;
         private readonly RefitSettings _refitSettings;

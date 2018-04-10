@@ -9,10 +9,14 @@ using Polly.Retry;
 
 namespace Lykke.ClientGenerator.Retries
 {
+    /// <summary>
+    /// Adds retries to the http request
+    /// </summary>
     public class RetryingHttpClientHandler : DelegatingHandler
     {
         protected readonly RetryPolicy _retryPolicy;
 
+        /// <inheritdoc />
         public RetryingHttpClientHandler([NotNull] HttpMessageHandler innerHandler, IRetryStrategy retryStrategy)
             : base(innerHandler)
         {
@@ -27,6 +31,7 @@ namespace Lykke.ClientGenerator.Retries
                     (exception, timeSpan, retryAttempt, context) => context["RetriesLeft"] = retryAttemptsCount - retryAttempt);
         }
 
+        /// <inheritdoc />
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {

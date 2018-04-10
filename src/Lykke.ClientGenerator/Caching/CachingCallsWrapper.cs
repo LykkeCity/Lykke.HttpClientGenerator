@@ -12,10 +12,15 @@ using Refit;
 
 namespace Lykke.ClientGenerator.Caching
 {
+    /// <summary>
+    /// Abstract class to add caching to method calls.
+    /// Derive and implement <see cref="GetCachingTime"/>() to implement custom caching logic. 
+    /// </summary>
     public abstract class CachingCallsWrapper : ICallsWrapper
     {
         private readonly IAsyncPolicy _retryPolicy;
 
+        /// <inheritdoc />
         protected CachingCallsWrapper()
         {
             _retryPolicy = Policy
@@ -23,6 +28,7 @@ namespace Lykke.ClientGenerator.Caching
                     new ContextualTtl());
         }
 
+        /// <inheritdoc />
         public Task<object> HandleMethodCall(MethodInfo targetMethod, object[] args, Func<Task<object>> innerHandler)
         {
             // ReSharper disable once ConditionIsAlwaysTrueOrFalse
@@ -40,6 +46,10 @@ namespace Lykke.ClientGenerator.Caching
                 new Context(GetExecutionKey(targetMethod, args), contextData), default);
         }
 
+        /// <summary>
+        /// Gets the amount of time for which the result of <paramref name="targetMethod"/>
+        /// executed with <paramref name="args"/> will be cached.
+        /// </summary>
         protected abstract TimeSpan GetCachingTime(MethodInfo targetMethod, object[] args);
 
         private static string GetExecutionKey(MethodInfo targetMethod, object[] args)

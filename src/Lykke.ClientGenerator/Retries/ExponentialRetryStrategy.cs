@@ -7,6 +7,7 @@ namespace Lykke.ClientGenerator.Retries
     /// </summary>
     public class ExponentialRetryStrategy : IRetryStrategy
     {
+        /// <inheritdoc />
         public ExponentialRetryStrategy(TimeSpan maxRetrySleepDuration, int retryAttemptsCount, double exponentBase)
         {
             _maxRetrySleepDuration = maxRetrySleepDuration;
@@ -30,8 +31,10 @@ namespace Lykke.ClientGenerator.Retries
 
         private readonly double _exponentBase;
 
+        /// <inheritdoc />
         public int RetryAttemptsCount { get; }
-        
+
+        /// <inheritdoc />
         public TimeSpan GetRetrySleepDuration(int retryAttempt, string url)
         {
             return TimeSpan.FromSeconds(Math.Min(_maxRetrySleepDuration.TotalSeconds, Math.Pow(_exponentBase, retryAttempt)));

@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Lykke.ClientGenerator.Infrastructure;
 using Lykke.ClientGenerator.Retries;
 using NUnit.Framework;
 using Refit;

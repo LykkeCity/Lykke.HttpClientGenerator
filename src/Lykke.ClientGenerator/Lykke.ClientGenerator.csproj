@@ -2,8 +2,16 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>7.1</LangVersion>
-        <Version>1.0.0-beta03</Version>
+        <Version>1.0.0-beta05</Version>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageLicenseUrl>https://github.com/LykkeCity/Lykke.ClientGenerator/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/LykkeCity/Lykke.ClientGenerator</PackageProjectUrl>
+        <Description>
+            This package helps to generate client proxy for an api using the Refit library.
+            It adds cache and retries using Polly to the generated proxies.
+            User logic can also be added as wrappers to the requests or to the method calls.
+        </Description>
+        <PackageTags>refit;polly;dotnet-core;csharp;api-client</PackageTags>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="JetBrains.Annotations" Version="11.1.0"/>

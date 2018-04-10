@@ -4,16 +4,21 @@ using System.Threading.Tasks;
 
 namespace Lykke.ClientGenerator.Infrastructure
 {
+    /// <summary>
+    /// Adds User-Agent header to the request
+    /// </summary>
     public class UserAgentHeaderHttpClientHandler : DelegatingHandler
     {
         protected readonly string _userAgent;
 
+        /// <inheritdoc />
         public UserAgentHeaderHttpClientHandler(HttpMessageHandler innerHandler, string userAgent)
             : base(innerHandler)
         {
             _userAgent = userAgent;
         }
 
+        /// <inheritdoc />
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
             CancellationToken cancellationToken)
         {

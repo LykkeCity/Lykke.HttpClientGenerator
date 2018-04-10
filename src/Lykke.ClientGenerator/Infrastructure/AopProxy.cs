@@ -20,6 +20,9 @@ namespace Lykke.ClientGenerator.Infrastructure
         private MethodCallHandler[] _handlers;
         private object _decorated;
 
+        /// <summary>
+        /// Describes the delegate handling the method call 
+        /// </summary>
         public delegate Task<object> MethodCallHandler(MethodInfo targetMethod, object[] args,
             Func<Task<object>> innerHandler);
 
@@ -29,6 +32,7 @@ namespace Lykke.ClientGenerator.Infrastructure
             _handlers = handlers;
         }
 
+        /// <inheritdoc />
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
             // ReSharper disable once GenericEnumeratorNotDisposed

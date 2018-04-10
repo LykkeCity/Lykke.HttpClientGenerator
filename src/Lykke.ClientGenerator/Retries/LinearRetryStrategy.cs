@@ -7,6 +7,7 @@ namespace Lykke.ClientGenerator.Retries
     /// </summary>
     public class LinearRetryStrategy : IRetryStrategy
     {
+        /// <inheritdoc />
         public LinearRetryStrategy(TimeSpan retrySleepDuration, int retryAttemptsCount)
         {
             RetrySleepDuration = retrySleepDuration;
@@ -20,6 +21,7 @@ namespace Lykke.ClientGenerator.Retries
         {
         }
 
+        /// <inheritdoc />
         public int RetryAttemptsCount { get; }
 
         /// <summary>
@@ -27,6 +29,7 @@ namespace Lykke.ClientGenerator.Retries
         /// </summary>
         public TimeSpan RetrySleepDuration { get; }
 
+        /// <inheritdoc />
         public TimeSpan GetRetrySleepDuration(int retryAttempt, string url) => RetrySleepDuration;
     }
 }
