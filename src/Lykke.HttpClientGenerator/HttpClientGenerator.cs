@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using JetBrains.Annotations;
-using Lykke.ClientGenerator.Caching;
-using Lykke.ClientGenerator.Infrastructure;
-using Lykke.ClientGenerator.Retries;
+using Lykke.HttpClientGenerator.Caching;
+using Lykke.HttpClientGenerator.Infrastructure;
+using Lykke.HttpClientGenerator.Retries;
 using Microsoft.Extensions.PlatformAbstractions;
 using Refit;
 
-namespace Lykke.ClientGenerator
+namespace Lykke.HttpClientGenerator
 {
     /// <summary>
     /// Generates client proxies for <see cref="Refit"/> interfaces
@@ -19,7 +19,7 @@ namespace Lykke.ClientGenerator
     /// To disable caching provide empty callsWrappers.
     /// To disable retries provide null for the retryStrategy.
     /// </remarks>
-    public class ClientProxyGenerator : IClientProxyGenerator
+    public class HttpClientGenerator : IHttpClientGenerator
     {
         private readonly string _rootUrl;
         private readonly RefitSettings _refitSettings;
@@ -28,7 +28,7 @@ namespace Lykke.ClientGenerator
         /// <summary>
         /// Creates the generator without proxy key and with default retry and caching settings
         /// </summary>
-        public static ClientProxyGenerator CreateDefault(string rootUrl)
+        public static HttpClientGenerator CreateDefault(string rootUrl)
         {
             return CreateDefault(rootUrl, null);
         }
@@ -36,7 +36,7 @@ namespace Lykke.ClientGenerator
         /// <summary>
         /// Creates the generator with proxy key and with default retry and caching settings
         /// </summary>
-        public static ClientProxyGenerator CreateDefault(string rootUrl, [CanBeNull] string apiKey)
+        public static HttpClientGenerator CreateDefault(string rootUrl, [CanBeNull] string apiKey)
         {
             return CreateDefault(rootUrl, apiKey, new LinearRetryStrategy());
         }
@@ -45,23 +45,23 @@ namespace Lykke.ClientGenerator
         /// Creates the generator with proxy key, default caching settings
         /// and with specified <paramref name="retryStrategy"/>. If it is null - no retries will be executed.
         /// </summary>
-        public static ClientProxyGenerator CreateDefault(string rootUrl, [CanBeNull] string apiKey,
+        public static HttpClientGenerator CreateDefault(string rootUrl, [CanBeNull] string apiKey,
             [CanBeNull] IRetryStrategy retryStrategy)
         {
-            return new ClientProxyGenerator(rootUrl, GetDefaultCallsWrappers(),
+            return new HttpClientGenerator(rootUrl, GetDefaultCallsWrappers(),
                 GetDefaultHttpMessageHandlerProviders(retryStrategy, apiKey));
         }
 
         /// <summary>
         /// Creates customized generator 
         /// </summary>
-        public static ClientProxyGenerator CreateCustom(string rootUrl, IEnumerable<ICallsWrapper> callsWrappers,
+        public static HttpClientGenerator CreateCustom(string rootUrl, IEnumerable<ICallsWrapper> callsWrappers,
             IEnumerable<Func<HttpMessageHandler, HttpMessageHandler>> httpMessageHandlerProviders)
         {
-            return new ClientProxyGenerator(rootUrl, callsWrappers, httpMessageHandlerProviders);
+            return new HttpClientGenerator(rootUrl, callsWrappers, httpMessageHandlerProviders);
         }
 
-        private ClientProxyGenerator(string rootUrl, IEnumerable<ICallsWrapper> callsWrappers,
+        private HttpClientGenerator(string rootUrl, IEnumerable<ICallsWrapper> callsWrappers,
             IEnumerable<Func<HttpMessageHandler, HttpMessageHandler>> httpMessageHandlerProviders)
         {
             _rootUrl = rootUrl;

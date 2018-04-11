@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lykke.ClientGenerator.Retries
+namespace Lykke.HttpClientGenerator.Retries
 {
     /// <summary>
     /// Describes the exponential url request retry behavior

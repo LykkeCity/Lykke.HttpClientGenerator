@@ -4,11 +4,11 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Lykke.ClientGenerator.Retries;
+using Lykke.HttpClientGenerator.Retries;
 using NUnit.Framework;
 using Refit;
 
-namespace Lykke.ClientGenerator.Tests
+namespace Lykke.HttpClientGenerator.Tests
 {
     public class RetryingHttpClientHandlerTests
     {

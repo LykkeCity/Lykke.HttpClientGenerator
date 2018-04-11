@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Lykke.ClientGenerator.Caching
+namespace Lykke.HttpClientGenerator.Caching
 {
     /// <summary>
     /// Adds caching to method calls. The caching TimeSpan is extracted from <see cref="ClientCachingAttribute"/>,

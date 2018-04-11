@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lykke.ClientGenerator.Caching
+namespace Lykke.HttpClientGenerator.Caching
 {
     /// <summary>
     /// Specifies the amount of time to cache this method call.

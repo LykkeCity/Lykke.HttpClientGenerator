@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lykke.ClientGenerator.Infrastructure
+namespace Lykke.HttpClientGenerator.Infrastructure
 {
     /// <summary>
     /// Adds api-key header to the request

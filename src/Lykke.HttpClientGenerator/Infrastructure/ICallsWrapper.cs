@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Lykke.ClientGenerator.Infrastructure
+namespace Lykke.HttpClientGenerator.Infrastructure
 {
     /// <summary>
     /// Interface of a class which wraps method calls with some logic.

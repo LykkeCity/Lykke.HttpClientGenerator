@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lykke.ClientGenerator", "src\Lykke.ClientGenerator\Lykke.ClientGenerator.csproj", "{A40D7E7D-5EAA-4AA8-AF2E-5784DD97098A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lykke.HttpClientGenerator", "src\Lykke.HttpClientGenerator\Lykke.HttpClientGenerator.csproj", "{A40D7E7D-5EAA-4AA8-AF2E-5784DD97098A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lykke.ClientGenerator.Tests", "tests\Lykke.ClientGenerator.Tests\Lykke.ClientGenerator.Tests.csproj", "{8C630CD3-918C-48D7-9FA5-F26FB596C9E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lykke.HttpClientGenerator.Tests", "tests\Lykke.HttpClientGenerator.Tests\Lykke.HttpClientGenerator.Tests.csproj", "{8C630CD3-918C-48D7-9FA5-F26FB596C9E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

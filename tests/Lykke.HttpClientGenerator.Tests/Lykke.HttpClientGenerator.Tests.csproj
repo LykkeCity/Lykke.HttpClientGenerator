@@ -12,6 +12,9 @@
     <PackageReference Include="Refit" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Lykke.ClientGenerator\Lykke.ClientGenerator.csproj" />
+    <ProjectReference Include="..\..\src\Lykke.HttpClientGenerator\Lykke.HttpClientGenerator.csproj">
+      <Project>{A40D7E7D-5EAA-4AA8-AF2E-5784DD97098A}</Project>
+      <Name>Lykke.HttpClientGenerator</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

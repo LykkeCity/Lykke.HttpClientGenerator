@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
-using Lykke.ClientGenerator.Infrastructure;
+using Lykke.HttpClientGenerator.Infrastructure;
 using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using Polly;
@@ -10,7 +10,7 @@ using Polly.Caching;
 using Polly.Caching.MemoryCache;
 using Refit;
 
-namespace Lykke.ClientGenerator.Caching
+namespace Lykke.HttpClientGenerator.Caching
 {
     /// <summary>
     /// Abstract class to add caching to method calls.

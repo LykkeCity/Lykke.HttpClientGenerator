@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Lykke.ClientGenerator.Infrastructure;
+using Lykke.HttpClientGenerator.Infrastructure;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
-namespace Lykke.ClientGenerator.Tests
+namespace Lykke.HttpClientGenerator.Tests
 {
     public class AopProxyTests
     {

@@ -7,7 +7,7 @@ using JetBrains.Annotations;
 using Polly;
 using Polly.Retry;
 
-namespace Lykke.ClientGenerator.Retries
+namespace Lykke.HttpClientGenerator.Retries
 {
     /// <summary>
     /// Adds retries to the http request
