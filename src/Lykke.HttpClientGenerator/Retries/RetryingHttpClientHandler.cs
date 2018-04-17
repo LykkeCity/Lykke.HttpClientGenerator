@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -14,21 +16,25 @@ namespace Lykke.HttpClientGenerator.Retries
     /// </summary>
     public class RetryingHttpClientHandler : DelegatingHandler
     {
-        protected readonly RetryPolicy _retryPolicy;
+        private static readonly HttpStatusCode[] _codesToRetry = {
+            HttpStatusCode.InternalServerError, HttpStatusCode.BadGateway, HttpStatusCode.ServiceUnavailable,
+            HttpStatusCode.GatewayTimeout, HttpStatusCode.RequestTimeout,
+        };
+        
+        private readonly RetryPolicy _retryPolicy;
 
         /// <inheritdoc />
-        public RetryingHttpClientHandler([NotNull] HttpMessageHandler innerHandler, IRetryStrategy retryStrategy)
-            : base(innerHandler)
+        public RetryingHttpClientHandler([NotNull] IRetryStrategy retryStrategy)
         {
-            if (innerHandler == null) throw new ArgumentNullException(nameof(innerHandler));
             if (retryStrategy == null) throw new ArgumentNullException(nameof(retryStrategy));
 
             var retryAttemptsCount = retryStrategy.RetryAttemptsCount;
             _retryPolicy = Policy
                 .Handle<HttpRequestException>()
-                .WaitAndRetryAsync(retryAttemptsCount, 
+                .WaitAndRetryAsync(retryAttemptsCount,
                     (retryAttempt, context) => retryStrategy.GetRetrySleepDuration(retryAttempt, context.ExecutionKey),
-                    (exception, timeSpan, retryAttempt, context) => context["RetriesLeft"] = retryAttemptsCount - retryAttempt);
+                    (exception, timeSpan, retryAttempt, context) =>
+                        context["RetriesLeft"] = retryAttemptsCount - retryAttempt);
         }
 
         /// <inheritdoc />
@@ -39,9 +45,7 @@ namespace Lykke.HttpClientGenerator.Retries
             {
                 var response = await base.SendAsync(request, ct);
                 if ((!context.TryGetValue("RetriesLeft", out var retriesLeft) || (int) retriesLeft > 0) &&
-                    !response.IsSuccessStatusCode &&
-                    response.StatusCode != HttpStatusCode.BadRequest &&
-                    response.StatusCode != HttpStatusCode.InternalServerError)
+                    _codesToRetry.Contains(response.StatusCode))
                 {
                     // throws to execute retry
                     response.EnsureSuccessStatusCode();

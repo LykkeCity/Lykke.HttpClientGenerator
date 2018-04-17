@@ -9,11 +9,10 @@ namespace Lykke.HttpClientGenerator.Infrastructure
     /// </summary>
     public class UserAgentHeaderHttpClientHandler : DelegatingHandler
     {
-        protected readonly string _userAgent;
+        private readonly string _userAgent;
 
         /// <inheritdoc />
-        public UserAgentHeaderHttpClientHandler(HttpMessageHandler innerHandler, string userAgent)
-            : base(innerHandler)
+        public UserAgentHeaderHttpClientHandler(string userAgent)
         {
             _userAgent = userAgent;
         }

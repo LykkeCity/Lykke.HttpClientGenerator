@@ -9,11 +9,10 @@ namespace Lykke.HttpClientGenerator.Infrastructure
     /// </summary>
     public class ApiKeyHeaderHttpClientHandler : DelegatingHandler
     {
-        protected readonly string _apiKey;
+        private readonly string _apiKey;
 
         /// <inheritdoc />
-        public ApiKeyHeaderHttpClientHandler(HttpMessageHandler innerHandler, string apiKey)
-            : base(innerHandler)
+        public ApiKeyHeaderHttpClientHandler(string apiKey)
         {
             _apiKey = apiKey;
         }

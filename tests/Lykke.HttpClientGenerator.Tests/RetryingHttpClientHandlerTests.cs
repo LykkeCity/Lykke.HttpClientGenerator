@@ -19,8 +19,11 @@ namespace Lykke.HttpClientGenerator.Tests
             var fakeHttpClientHandler = new FakeHttpClientHandler();
             var refitSettings = new RefitSettings
             {
-                HttpMessageHandlerFactory = () => new RetryingHttpClientHandler(fakeHttpClientHandler,
-                    new LinearRetryStrategy(TimeSpan.FromMilliseconds(1), 6))
+                HttpMessageHandlerFactory = () =>
+                    new RetryingHttpClientHandler(new LinearRetryStrategy(TimeSpan.FromMilliseconds(1), 6))
+                    {
+                        InnerHandler = fakeHttpClientHandler
+                    }
             };
 
             var proxy = RestService.For<ITestInterface>("http://fake.host", refitSettings);
@@ -49,7 +52,7 @@ namespace Lykke.HttpClientGenerator.Tests
             SendCounter++;
             return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadGateway));
         }
-        
+
         public int SendCounter { get; private set; }
     }
 }

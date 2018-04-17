@@ -1,15 +1,27 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Lykke.HttpClientGenerator.Caching
 {
     /// <summary>
     /// Specifies the amount of time to cache this method call.
-    /// Used with <see cref="AttributeBasedCachingCallsWrapper"/>.
+    /// Used with <see cref="AttributeBasedCachingStrategy"/>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
     public class ClientCachingAttribute : Attribute
     {
         private TimeSpan _cachingTime;
+
+        /// <inheritdoc />
+        public ClientCachingAttribute()
+        {
+        }
+
+        /// <inheritdoc />
+        public ClientCachingAttribute(string cachingTimeString)
+        {
+            _cachingTime = TimeSpan.Parse(cachingTimeString, CultureInfo.InvariantCulture);
+        }
 
         /// <summary>
         /// Gets the amount of time specified

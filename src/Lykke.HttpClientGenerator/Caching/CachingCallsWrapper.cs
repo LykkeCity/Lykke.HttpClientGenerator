@@ -8,21 +8,21 @@ using Newtonsoft.Json;
 using Polly;
 using Polly.Caching;
 using Polly.Caching.MemoryCache;
-using Refit;
 
 namespace Lykke.HttpClientGenerator.Caching
 {
     /// <summary>
-    /// Abstract class to add caching to method calls.
-    /// Derive and implement <see cref="GetCachingTime"/>() to implement custom caching logic. 
+    /// Adds caching to method calls.
     /// </summary>
-    public abstract class CachingCallsWrapper : ICallsWrapper
+    public class CachingCallsWrapper : ICallsWrapper
     {
+        private readonly ICachingStrategy _cachingStrategy;
         private readonly IAsyncPolicy _retryPolicy;
 
         /// <inheritdoc />
-        protected CachingCallsWrapper()
+        public CachingCallsWrapper(ICachingStrategy cachingStrategy)
         {
+            _cachingStrategy = cachingStrategy;
             _retryPolicy = Policy
                 .CacheAsync(new MemoryCacheProvider(new MemoryCache(new MemoryCacheOptions())),
                     new ContextualTtl());
@@ -31,13 +31,11 @@ namespace Lykke.HttpClientGenerator.Caching
         /// <inheritdoc />
         public Task<object> HandleMethodCall(MethodInfo targetMethod, object[] args, Func<Task<object>> innerHandler)
         {
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalse
-            // ReSharper disable once HeuristicUnreachableCode
-            if (targetMethod.GetCustomAttribute<GetAttribute>() == null)
+            var cachingTime = _cachingStrategy.GetCachingTime(targetMethod, args);
+            
+            if (cachingTime <= TimeSpan.Zero)
                 return innerHandler();
-            
-            var cachingTime = GetCachingTime(targetMethod, args);
-            
+
             var contextData = new Dictionary<string, object>
             {
                 {ContextualTtl.TimeSpanKey, cachingTime}
@@ -50,8 +48,6 @@ namespace Lykke.HttpClientGenerator.Caching
         /// Gets the amount of time for which the result of <paramref name="targetMethod"/>
         /// executed with <paramref name="args"/> will be cached.
         /// </summary>
-        protected abstract TimeSpan GetCachingTime(MethodInfo targetMethod, object[] args);
-
         private static string GetExecutionKey(MethodInfo targetMethod, object[] args)
         {
             return $"{targetMethod.DeclaringType}:{targetMethod.Name}:{targetMethod.GetHashCode()}:{JsonConvert.SerializeObject(args)}";

@@ -72,6 +72,7 @@ namespace Lykke.HttpClientGenerator.Tests
             {
                 performedActions.Add($"{method.Name} before {handlerNum} with args {JsonConvert.SerializeObject(args)}");
                 var o = await inner();
+                // ReSharper disable once ConstantNullCoalescingCondition
                 performedActions.Add($"{method.Name} after {handlerNum} with res {o ?? "null"}");
                 return o is int i
                     ? i + (int) Math.Pow(10, handlerNum)

@@ -26,12 +26,6 @@ namespace Lykke.HttpClientGenerator.Infrastructure
         public delegate Task<object> MethodCallHandler(MethodInfo targetMethod, object[] args,
             Func<Task<object>> innerHandler);
 
-        private void Initialize(object decorated, MethodCallHandler[] handlers)
-        {
-            _decorated = decorated;
-            _handlers = handlers;
-        }
-
         /// <inheritdoc />
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
@@ -103,6 +97,7 @@ namespace Lykke.HttpClientGenerator.Infrastructure
             return new MethodHelperFuncs(async t =>
             {
                 await (Task)t;
+                // ReSharper disable once AssignNullToNotNullAttribute
                 return null;
             }, t => t, BuildInvokeFunc(methodInfo));
         }
@@ -115,24 +110,15 @@ namespace Lykke.HttpClientGenerator.Infrastructure
 
         private static Func<object, object[], object> BuildInvokeFunc(MethodInfo methodInfo)
         {
-            try
-            {
-
-                var instanceParam = Expression.Parameter(typeof(object));
-                var argsParam = Expression.Parameter(typeof(object[]));
-                Expression expr = Expression.Call(Expression.Convert(instanceParam, methodInfo.DeclaringType),
-                    methodInfo, GetMethodArgsExpressions(methodInfo, argsParam));
-                if (methodInfo.ReturnType == typeof(void))
-                    expr = Expression.Block(expr, Expression.Constant(null));
+            var instanceParam = Expression.Parameter(typeof(object));
+            var argsParam = Expression.Parameter(typeof(object[]));
+            Expression expr = Expression.Call(Expression.Convert(instanceParam, methodInfo.DeclaringType),
+                methodInfo, GetMethodArgsExpressions(methodInfo, argsParam));
+            if (methodInfo.ReturnType == typeof(void))
+                expr = Expression.Block(expr, Expression.Constant(null));
                 
-                return Expression.Lambda<Func<object, object[], object>>(expr, instanceParam, argsParam)
-                    .Compile();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            return Expression.Lambda<Func<object, object[], object>>(expr, instanceParam, argsParam)
+                .Compile();
         }
         
         private static IEnumerable<Expression> GetMethodArgsExpressions(MethodInfo targetMethod,
@@ -165,6 +151,12 @@ namespace Lykke.HttpClientGenerator.Infrastructure
             object proxy = DispatchProxy.Create<T, AopProxy>();
             ((AopProxy) proxy).Initialize(decorated, handlers);
             return (T) proxy;
+        }
+        
+        private void Initialize(object decorated, MethodCallHandler[] handlers)
+        {
+            _decorated = decorated;
+            _handlers = handlers;
         }
 
         private class MethodHelperFuncs
