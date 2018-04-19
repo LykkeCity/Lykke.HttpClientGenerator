@@ -11,7 +11,7 @@ namespace Lykke.HttpClientGenerator
     /// Generates client proxies for <see cref="Refit"/> interfaces
     /// </summary>
     /// <remarks>
-    /// By default adds custom headers, caching and retries.
+    /// By default adds custom headers, caching for attribute-marked methods and retries.
     /// To disable caching provide empty callsWrappers.
     /// To disable retries provide null for the retryStrategy.
     /// </remarks>
@@ -59,7 +59,9 @@ namespace Lykke.HttpClientGenerator
         {
             if (handlersEnumerator.MoveNext())
             {
-                return handlersEnumerator.Current.InnerHandler = CreateHttpMessageHandler(handlersEnumerator);
+                var current = handlersEnumerator.Current;
+                current.InnerHandler = CreateHttpMessageHandler(handlersEnumerator);
+                return current;
             }
             else
             {

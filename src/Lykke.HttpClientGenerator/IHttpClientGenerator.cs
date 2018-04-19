@@ -1,8 +1,11 @@
-﻿namespace Lykke.HttpClientGenerator
+﻿using JetBrains.Annotations;
+
+namespace Lykke.HttpClientGenerator
 {
     /// <summary>
     /// Generates client proxies for <see cref="Refit"/> interfaces
     /// </summary>
+    [PublicAPI]
     public interface IHttpClientGenerator
     {
         /// <summary>

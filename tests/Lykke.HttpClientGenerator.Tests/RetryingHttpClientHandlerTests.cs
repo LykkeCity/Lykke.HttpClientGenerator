@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Lykke.HttpClientGenerator.Retries;
 using NUnit.Framework;
@@ -16,7 +14,7 @@ namespace Lykke.HttpClientGenerator.Tests
         public void Always_ShouldRetryCorrectly()
         {
             // arrange
-            var fakeHttpClientHandler = new FakeHttpClientHandler();
+            var fakeHttpClientHandler = new FakeHttpClientHandler(r => new HttpResponseMessage(HttpStatusCode.BadGateway));
             var refitSettings = new RefitSettings
             {
                 HttpMessageHandlerFactory = () =>
@@ -36,23 +34,5 @@ namespace Lykke.HttpClientGenerator.Tests
                 .WithMessage("Response status code does not indicate success: 502 (Bad Gateway).");
             fakeHttpClientHandler.SendCounter.Should().Be(7);
         }
-    }
-
-    public interface ITestInterface
-    {
-        [Get("/fake/url/")]
-        Task<string> TestMethod();
-    }
-
-    public class FakeHttpClientHandler : HttpMessageHandler
-    {
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
-            CancellationToken cancellationToken)
-        {
-            SendCounter++;
-            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.BadGateway));
-        }
-
-        public int SendCounter { get; private set; }
     }
 }
