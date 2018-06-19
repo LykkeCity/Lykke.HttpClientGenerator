@@ -7,7 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Newtonsoft.Json;
 using Polly;
 using Polly.Caching;
-using Polly.Caching.MemoryCache;
+using Polly.Caching.Memory;
 
 namespace Lykke.HttpClientGenerator.Caching
 {
