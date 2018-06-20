@@ -1,17 +1,17 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using JetBrains.Annotations;
-using System;
 
 namespace Lykke.HttpClientGenerator
 {
     /// <summary>
-    /// Autofac extension to register LimitOperationsCollector job client
+    /// Autofac extension to register refit clients.
     /// </summary>
     [PublicAPI]
     public static class AutofacExtensions
     {
         /// <summary>
-        /// Registers LimitOperationsCollectorJob client.
+        /// Registers Refit client of type <typeparamref name="TInterface"/>.
         /// </summary>
         public static void RegisterClient<TInterface>(
             [NotNull] this ContainerBuilder builder,

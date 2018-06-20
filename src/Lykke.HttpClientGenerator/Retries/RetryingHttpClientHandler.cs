@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -32,7 +31,7 @@ namespace Lykke.HttpClientGenerator.Retries
             _retryPolicy = Policy
                 .Handle<HttpRequestException>()
                 .WaitAndRetryAsync(retryAttemptsCount,
-                    (retryAttempt, context) => retryStrategy.GetRetrySleepDuration(retryAttempt, context.ExecutionKey),
+                    (retryAttempt, context) => retryStrategy.GetRetrySleepDuration(retryAttempt, context.OperationKey),
                     (exception, timeSpan, retryAttempt, context) =>
                         context["RetriesLeft"] = retryAttemptsCount - retryAttempt);
         }
