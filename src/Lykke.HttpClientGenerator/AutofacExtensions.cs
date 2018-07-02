@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using JetBrains.Annotations;
+using Lykke.HttpClientGenerator.Infrastructure;
 
 namespace Lykke.HttpClientGenerator
 {
@@ -25,7 +26,9 @@ namespace Lykke.HttpClientGenerator
             if (string.IsNullOrWhiteSpace(serviceUrl))
                 throw new ArgumentException("Value cannot be empty.", nameof(serviceUrl));
 
-            var clientBuilder = HttpClientGenerator.BuildForUrl(serviceUrl);
+            var clientBuilder = HttpClientGenerator.BuildForUrl(serviceUrl)
+                .WithAdditionalCallsWrapper(new ExceptionHandlerCallsWrapper());
+            
             clientBuilder = builderConfigure?.Invoke(clientBuilder) ?? clientBuilder.WithoutRetries();
 
             builder
