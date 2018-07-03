@@ -14,6 +14,7 @@ namespace Lykke.HttpClientGenerator.Infrastructure
     [PublicAPI]
     public class ExceptionHandlerCallsWrapper : ICallsWrapper
     {
+        /// <inheritdoc />
         public async Task<object> HandleMethodCall(MethodInfo targetMethod, object[] args, Func<Task<object>> innerHandler)
         {
             try
