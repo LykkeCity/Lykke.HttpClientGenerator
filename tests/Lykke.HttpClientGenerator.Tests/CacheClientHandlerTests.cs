@@ -112,11 +112,9 @@ namespace Lykke.HttpClientGenerator.Tests
             await Task.WhenAll(cacheModifyingTasks);
             cacheManager.Dispose();
             var results = bag.ToArray().SelectMany(x => x);
-            var res2Result = results.Count(x => x.Contains( result2Str));
+            var res2Count = results.Count(x => x.Contains( result2Str));
             // assert
-            //result.Should().Be(result1Str);
-            //result1.Should().Be(result1Str);
-            //result2.Should().Be(result2Str);
+            res2Count.Should().BeGreaterThan(0);
         }
     }
 }
