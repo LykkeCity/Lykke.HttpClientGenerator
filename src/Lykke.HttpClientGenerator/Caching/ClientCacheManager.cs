@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Lykke.HttpClientGenerator.Caching
 {
@@ -11,9 +8,9 @@ namespace Lykke.HttpClientGenerator.Caching
         {
         }
 
-        public Task InvalidateCacheAsync()
+        public async Task InvalidateCacheAsync()
         {
-            return OnInvalidate?.Invoke();
+            await (OnInvalidate?.Invoke() ?? Task.FromResult(0));
         }
 
         public event InvalidateCache OnInvalidate;

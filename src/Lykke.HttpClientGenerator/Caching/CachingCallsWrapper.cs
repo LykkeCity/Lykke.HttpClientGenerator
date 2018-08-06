@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Nito.AsyncEx;
 
 namespace Lykke.HttpClientGenerator.Caching
 {
@@ -23,8 +24,7 @@ namespace Lykke.HttpClientGenerator.Caching
         private readonly ConcurrentDictionary<string, object> _cacheKeys;
         //ReaderWriterLock works best where most accesses are reads, while writes are infrequent and of short duration.
         //Multiple readers alternate with single writers, so that neither readers nor writers are blocked for long periods.
-        //https://msdn.microsoft.com/en-us/library/system.threading.readerwriterlock(v=vs.110).aspx
-        private readonly ReaderWriterLockSlim _readerWriterLock = new ReaderWriterLockSlim();
+        private readonly AsyncReaderWriterLock _readerWriterLock = new AsyncReaderWriterLock();
 
         /// <inheritdoc />
         public CachingCallsWrapper(ICachingStrategy cachingStrategy, ICustomAsyncCacheProvider asyncCacheProvider)
@@ -38,10 +38,10 @@ namespace Lykke.HttpClientGenerator.Caching
         }
 
         /// <inheritdoc />
-        public Task<object> HandleMethodCall(MethodInfo targetMethod, object[] args, Func<Task<object>> innerHandler)
+        public async Task<object> HandleMethodCall(MethodInfo targetMethod, object[] args, Func<Task<object>> innerHandler)
         {
             var cachingTime = _cachingStrategy.GetCachingTime(targetMethod, args);
-            
+
             if (cachingTime <= TimeSpan.Zero)
                 return innerHandler();
 
@@ -52,16 +52,11 @@ namespace Lykke.HttpClientGenerator.Caching
 
             string cacheKey = GetExecutionKey(targetMethod, args);
 
-            _readerWriterLock.EnterReadLock();
-            try
+            using (var readLock = await _readerWriterLock.ReaderLockAsync())
             {
                 _cacheKeys[cacheKey] = true;
-                return _retryPolicy.ExecuteAsync((context, ct) => innerHandler(),
+                return await _retryPolicy.ExecuteAsync((context, ct) => innerHandler(),
                     new Context(cacheKey, contextData), default);
-            }
-            finally
-            {
-                _readerWriterLock.ExitReadLock();
             }
         }
 
@@ -69,20 +64,15 @@ namespace Lykke.HttpClientGenerator.Caching
         {
             var cts = new CancellationTokenSource();
 
-            _readerWriterLock.EnterWriteLock();
-            try
+            using (var writeLock = await _readerWriterLock.WriterLockAsync())
             {
                 var clearCacheKeys = _cacheKeys.Keys.ToArray();
 
                 foreach (var cacheKey in clearCacheKeys)
                 {
                     await _asyncCacheProvider.RemoveAsync(cacheKey, cts.Token);
-                    _cacheKeys.TryRemove(cacheKey,out var x);
+                    _cacheKeys.TryRemove(cacheKey, out var x);
                 }
-            }
-            finally 
-            {
-                _readerWriterLock.ExitWriteLock();
             }
         }
 
