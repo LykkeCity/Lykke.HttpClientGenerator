@@ -7,7 +7,7 @@ using Polly.Caching;
 
 namespace Lykke.HttpClientGenerator.Caching
 {
-    public interface ICustomAsyncCacheProvider : IAsyncCacheProvider
+    public interface IRemovableAsyncCacheProvider : IAsyncCacheProvider
     {
         Task RemoveAsync(string ket, CancellationToken token);
     }

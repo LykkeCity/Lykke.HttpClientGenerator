@@ -18,7 +18,7 @@ namespace Lykke.HttpClientGenerator.Caching
     /// </summary>
     public class CachingCallsWrapper : ICallsWrapper
     {
-        private readonly ICustomAsyncCacheProvider _asyncCacheProvider;
+        private readonly IRemovableAsyncCacheProvider _asyncCacheProvider;
         private readonly ICachingStrategy _cachingStrategy;
         private readonly IAsyncPolicy _retryPolicy;
         private readonly ConcurrentDictionary<string, object> _cacheKeys;
@@ -27,7 +27,7 @@ namespace Lykke.HttpClientGenerator.Caching
         private readonly AsyncReaderWriterLock _readerWriterLock = new AsyncReaderWriterLock();
 
         /// <inheritdoc />
-        public CachingCallsWrapper(ICachingStrategy cachingStrategy, ICustomAsyncCacheProvider asyncCacheProvider)
+        public CachingCallsWrapper(ICachingStrategy cachingStrategy, IRemovableAsyncCacheProvider asyncCacheProvider)
         {
             _cacheKeys = new ConcurrentDictionary<string, object>();
             _asyncCacheProvider = asyncCacheProvider;

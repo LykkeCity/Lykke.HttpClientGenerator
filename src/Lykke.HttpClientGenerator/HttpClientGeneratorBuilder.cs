@@ -148,7 +148,7 @@ namespace Lykke.HttpClientGenerator
             
             if (_cachingStrategy != null)
             {
-                var cacheProvider = new CustomAsyncCacheProvider(new MemoryCache(new MemoryCacheOptions()));
+                var cacheProvider = new RemovableAsyncCacheProvider(new MemoryCache(new MemoryCacheOptions()));
                 CachingCallsWrapper cachingCallsWrapper = new CachingCallsWrapper(_cachingStrategy, cacheProvider);
                 if (cacheManager != null)
                 {

@@ -10,11 +10,11 @@ using Polly.Utilities;
 
 namespace Lykke.HttpClientGenerator.Caching
 {
-    public class CustomAsyncCacheProvider : ICustomAsyncCacheProvider
+    public class RemovableAsyncCacheProvider : IRemovableAsyncCacheProvider
     {
         private readonly IMemoryCache _cache;
 
-        public CustomAsyncCacheProvider(IMemoryCache memoryCache)
+        public RemovableAsyncCacheProvider(IMemoryCache memoryCache)
         {
             if (memoryCache == null) throw new ArgumentNullException(nameof(memoryCache));
             _cache = memoryCache;

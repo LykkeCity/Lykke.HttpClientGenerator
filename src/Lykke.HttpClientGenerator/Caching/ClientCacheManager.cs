@@ -10,7 +10,7 @@ namespace Lykke.HttpClientGenerator.Caching
 
         public async Task InvalidateCacheAsync()
         {
-            await (OnInvalidate?.Invoke() ?? Task.FromResult(0));
+            await (OnInvalidate?.Invoke() ?? Task.CompletedTask);
         }
 
         public event InvalidateCache OnInvalidate;
