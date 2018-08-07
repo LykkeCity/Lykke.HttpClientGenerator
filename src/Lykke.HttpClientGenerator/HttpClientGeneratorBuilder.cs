@@ -13,6 +13,7 @@ namespace Lykke.HttpClientGenerator
 {
     /// <summary>
     /// Provides a simple interface for configuring the <see cref="HttpClientGenerator"/> for friquient use-cases
+    /// Warning! By default the Caching Strategy  is AttributeBasedCachingStrategy.
     /// </summary>
     [PublicAPI]
     public class HttpClientGeneratorBuilder

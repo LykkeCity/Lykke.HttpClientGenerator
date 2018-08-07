@@ -12,6 +12,7 @@ using FluentAssertions;
 using Lykke.HttpClientGenerator.Caching;
 using Lykke.HttpClientGenerator.Infrastructure;
 using Lykke.HttpClientGenerator.Retries;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
 using Refit;
 
@@ -19,30 +20,35 @@ namespace Lykke.HttpClientGenerator.Tests
 {
     public class CacheClientHandlerTests
     {
+        private static string _result1Str = "the result 1";
+        private static string _result2Str = "the result 2";
+
+        [Test]
+        public async Task WorksCorrectlyForOneThread_WithNoCachingManager()
+        {
+            // arrange
+            var (h3, y1) = MakeFakeHttpClientHandler();
+
+            // act
+            var httpBuilder = HttpClientGenerator.BuildForUrl("http://fake.host");
+            var testInterface = httpBuilder
+                .WithCachingStrategy(new AttributeBasedCachingStrategy())
+                .WithAdditionalDelegatingHandler(h3)
+                .Create()
+                .Generate<ITestInterface>();
+
+            var result = await testInterface.TestMethodWithCache();
+            var result2 = await testInterface.TestMethod();
+            // assert
+            result.Should().Be(_result1Str);
+            result2.Should().Be(_result2Str);
+        }
+
         [Test]
         public async Task WorksCorrectlyForOneThread_InvalidateCacheAsync()
         {
-            string result1Str = "the result 1";
-            string result2Str = "the result 2";
-            int counter = 0;
             // arrange
-            var h3 = new FakeHttpClientHandler(r =>
-            {
-                counter++;
-
-                if (counter > 1)
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = new ByteArrayContent(Encoding.UTF8.GetBytes(result2Str))
-                    };
-                }
-
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new ByteArrayContent(Encoding.UTF8.GetBytes(result1Str))
-                };
-            });
+            var (h3, y1) = MakeFakeHttpClientHandler();
 
             // act
 
@@ -60,29 +66,16 @@ namespace Lykke.HttpClientGenerator.Tests
             var result2 = await testInterface.TestMethodWithCache();
             cacheManager.Dispose();
             // assert
-            result.Should().Be(result1Str);
-            result1.Should().Be(result1Str);
-            result2.Should().Be(result2Str);
+            result.Should().Be(_result1Str);
+            result1.Should().Be(_result1Str);
+            result2.Should().Be(_result2Str);
         }
 
         [Test]
         public async Task WorksCorrectlyForManyThreads_InvalidateCacheAsync()
         {
-            string result1Str = "the result 1";
-            string result2Str = "the result 2";
-            int counter = 0;
             // arrange
-            var h3 = new FakeHttpClientHandler(r =>
-            {
-                counter++;
-
-                string response = counter % 2 == 0 ? result2Str : result1Str;
-
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new ByteArrayContent(Encoding.UTF8.GetBytes(response))
-                };
-            });
+            var (h3, y1) = MakeFakeHttpClientHandler();
 
             var bag = new ConcurrentBag<List<string>>();
             var httpBuilder = HttpClientGenerator.BuildForUrl("http://fake.host");
@@ -112,9 +105,35 @@ namespace Lykke.HttpClientGenerator.Tests
             await Task.WhenAll(cacheModifyingTasks);
             cacheManager.Dispose();
             var results = bag.ToArray().SelectMany(x => x);
-            var res2Count = results.Count(x => x.Contains( result2Str));
+            var res2Count = results.Count(x => x.Contains(_result2Str));
             // assert
             res2Count.Should().BeGreaterThan(0);
+        }
+
+        private static (FakeHttpClientHandler, MockCounter) MakeFakeHttpClientHandler()
+        {
+            MockCounter mockCounter = new MockCounter();
+
+            return (new FakeHttpClientHandler(r =>
+            {
+                var counter =  ++mockCounter.Counter;
+
+                string response = counter % 2 == 0 ? _result2Str : _result1Str;
+
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new ByteArrayContent(Encoding.UTF8.GetBytes(response))
+                };
+            }), mockCounter);
+        }
+
+        private class MockCounter
+        {
+            public int Counter { get; set; }
+
+            public MockCounter()
+            {
+            }
         }
     }
 }

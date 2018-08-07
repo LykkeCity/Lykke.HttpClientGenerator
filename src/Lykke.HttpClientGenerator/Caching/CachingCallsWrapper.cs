@@ -43,7 +43,7 @@ namespace Lykke.HttpClientGenerator.Caching
             var cachingTime = _cachingStrategy.GetCachingTime(targetMethod, args);
 
             if (cachingTime <= TimeSpan.Zero)
-                return innerHandler();
+                return await innerHandler();
 
             var contextData = new Dictionary<string, object>
             {
@@ -55,7 +55,7 @@ namespace Lykke.HttpClientGenerator.Caching
             using (var readLock = await _readerWriterLock.ReaderLockAsync())
             {
                 _cacheKeys[cacheKey] = true;
-                return await _retryPolicy.ExecuteAsync((context, ct) => innerHandler(),
+                return await _retryPolicy.ExecuteAsync(async (context, ct) => await innerHandler(),
                     new Context(cacheKey, contextData), default);
             }
         }
