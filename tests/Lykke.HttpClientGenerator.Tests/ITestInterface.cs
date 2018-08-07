@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Lykke.HttpClientGenerator.Caching;
 using Refit;
 
 namespace Lykke.HttpClientGenerator.Tests
@@ -7,5 +8,9 @@ namespace Lykke.HttpClientGenerator.Tests
     {
         [Get("/fake/url/")]
         Task<string> TestMethod();
+
+        [Get("/fake/url/")]
+        [ClientCaching(Minutes = 29)]
+        Task<string> TestMethodWithCache();
     }
 }

@@ -5,12 +5,15 @@ using JetBrains.Annotations;
 using Lykke.HttpClientGenerator.Caching;
 using Lykke.HttpClientGenerator.Infrastructure;
 using Lykke.HttpClientGenerator.Retries;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.PlatformAbstractions;
+using Polly.Caching.Memory;
 
 namespace Lykke.HttpClientGenerator
 {
     /// <summary>
     /// Provides a simple interface for configuring the <see cref="HttpClientGenerator"/> for friquient use-cases
+    /// Warning! By default the Caching Strategy  is AttributeBasedCachingStrategy.
     /// </summary>
     [PublicAPI]
     public class HttpClientGeneratorBuilder
@@ -97,7 +100,18 @@ namespace Lykke.HttpClientGenerator
         /// </summary>
         public HttpClientGenerator Create()
         {
-            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(), GetDelegatingHandlers());
+            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(null), GetDelegatingHandlers());
+        }
+
+        /// <summary>
+        /// Creates the configured <see cref="HttpClientGenerator"/> instance
+        /// </summary>
+        /// <param name="cacheManager">Instance of class which is responsible for clients cache invalidation only. 
+        /// Use Lykke.HttpClientGenerator.Caching.ClientCacheManager</param>
+        /// <returns></returns>
+        public HttpClientGenerator Create(IClientCacheManager cacheManager)
+        {
+            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(cacheManager), GetDelegatingHandlers());
         }
 
         private IEnumerable<DelegatingHandler> GetDelegatingHandlers()
@@ -123,7 +137,7 @@ namespace Lykke.HttpClientGenerator
             }
         }
 
-        private IEnumerable<ICallsWrapper> GetCallsWrappers()
+        private IEnumerable<ICallsWrapper> GetCallsWrappers(IClientCacheManager cacheManager)
         {
             if (_additionalCallsWrappers != null)
             {
@@ -135,7 +149,14 @@ namespace Lykke.HttpClientGenerator
             
             if (_cachingStrategy != null)
             {
-                 yield return new CachingCallsWrapper(_cachingStrategy);
+                var cacheProvider = new RemovableAsyncCacheProvider(new MemoryCache(new MemoryCacheOptions()));
+                CachingCallsWrapper cachingCallsWrapper = new CachingCallsWrapper(_cachingStrategy, cacheProvider);
+                if (cacheManager != null)
+                {
+                    cacheManager.OnInvalidate += cachingCallsWrapper.InvalidateCache;
+                }
+
+                yield return cachingCallsWrapper;
             }
         }
 
