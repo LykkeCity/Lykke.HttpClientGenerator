@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using Lykke.HttpClientGenerator.Caching;
 using Lykke.HttpClientGenerator.Infrastructure;
+using Newtonsoft.Json;
 using Refit;
 
 namespace Lykke.HttpClientGenerator
@@ -37,10 +38,21 @@ namespace Lykke.HttpClientGenerator
         /// <inheritdoc />
         public HttpClientGenerator(string rootUrl, IEnumerable<ICallsWrapper> callsWrappers,
             IEnumerable<DelegatingHandler> httpDelegatingHandlers)
+            : this(rootUrl, callsWrappers, httpDelegatingHandlers, null)
+        {
+        }
+
+        /// <inheritdoc />
+        public HttpClientGenerator(string rootUrl, IEnumerable<ICallsWrapper> callsWrappers,
+            IEnumerable<DelegatingHandler> httpDelegatingHandlers, JsonSerializerSettings jsonSerializerSettings)
         {
             _rootUrl = rootUrl;
             var httpMessageHandler = CreateHttpMessageHandler(httpDelegatingHandlers.ToList().GetEnumerator());
-            _refitSettings = new RefitSettings {HttpMessageHandlerFactory = () => httpMessageHandler};
+            _refitSettings = new RefitSettings
+            {
+                HttpMessageHandlerFactory = () => httpMessageHandler,
+                JsonSerializerSettings = jsonSerializerSettings
+            };
             _wrappers = callsWrappers.ToList();
         }
 
@@ -73,7 +85,7 @@ namespace Lykke.HttpClientGenerator
         private T WrapIfNeeded<T>(T obj)
         {
             return _wrappers.Count > 0
-                ? AopProxy.Create(obj, _wrappers.Select(w => (AopProxy.MethodCallHandler) w.HandleMethodCall).ToArray())
+                ? AopProxy.Create(obj, _wrappers.Select(w => (AopProxy.MethodCallHandler)w.HandleMethodCall).ToArray())
                 : obj;
         }
     }

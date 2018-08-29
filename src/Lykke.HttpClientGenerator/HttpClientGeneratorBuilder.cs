@@ -7,6 +7,7 @@ using Lykke.HttpClientGenerator.Infrastructure;
 using Lykke.HttpClientGenerator.Retries;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.PlatformAbstractions;
+using Newtonsoft.Json;
 using Polly.Caching.Memory;
 
 namespace Lykke.HttpClientGenerator
@@ -24,12 +25,13 @@ namespace Lykke.HttpClientGenerator
             _rootUrl = rootUrl ?? throw new ArgumentNullException(nameof(rootUrl));
         }
 
-        private string _rootUrl ;
-        [CanBeNull] private string _apiKey ;
-        [CanBeNull] private IRetryStrategy _retryStrategy  = new LinearRetryStrategy();
-        [CanBeNull] private ICachingStrategy _cachingStrategy  = new AttributeBasedCachingStrategy();
-        private List<ICallsWrapper> _additionalCallsWrappers  = new List<ICallsWrapper>();
-        private List<DelegatingHandler> _additionalDelegatingHandlers  = new List<DelegatingHandler>();
+        private string _rootUrl;
+        [CanBeNull] private string _apiKey;
+        [CanBeNull] private IRetryStrategy _retryStrategy = new LinearRetryStrategy();
+        [CanBeNull] private ICachingStrategy _cachingStrategy = new AttributeBasedCachingStrategy();
+        private List<ICallsWrapper> _additionalCallsWrappers = new List<ICallsWrapper>();
+        private List<DelegatingHandler> _additionalDelegatingHandlers = new List<DelegatingHandler>();
+        private JsonSerializerSettings _jsonSerializerSettings;
 
         /// <summary>
         /// Specifies the value of the api-key header to add to the requests.
@@ -96,11 +98,20 @@ namespace Lykke.HttpClientGenerator
         }
 
         /// <summary>
+        /// Configure custom json serializer settings
+        /// </summary>
+        public HttpClientGeneratorBuilder WithJsonSerializerSettings([NotNull] JsonSerializerSettings settings)
+        {
+            _jsonSerializerSettings = settings;
+            return this;
+        }
+
+        /// <summary>
         /// Creates the configured <see cref="HttpClientGenerator"/> instance
         /// </summary>
         public HttpClientGenerator Create()
         {
-            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(null), GetDelegatingHandlers());
+            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(null), GetDelegatingHandlers(), _jsonSerializerSettings);
         }
 
         /// <summary>
@@ -111,7 +122,7 @@ namespace Lykke.HttpClientGenerator
         /// <returns></returns>
         public HttpClientGenerator Create(IClientCacheManager cacheManager)
         {
-            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(cacheManager), GetDelegatingHandlers());
+            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(cacheManager), GetDelegatingHandlers(), _jsonSerializerSettings);
         }
 
         private IEnumerable<DelegatingHandler> GetDelegatingHandlers()
@@ -123,7 +134,7 @@ namespace Lykke.HttpClientGenerator
                     yield return additionalDelegatingHandler;
                 }
             }
-            
+
             if (_apiKey != null)
             {
                 yield return new ApiKeyHeaderHttpClientHandler(_apiKey);
@@ -146,7 +157,7 @@ namespace Lykke.HttpClientGenerator
                     yield return additionalCallsWrapper;
                 }
             }
-            
+
             if (_cachingStrategy != null)
             {
                 var cacheProvider = new RemovableAsyncCacheProvider(new MemoryCache(new MemoryCacheOptions()));
