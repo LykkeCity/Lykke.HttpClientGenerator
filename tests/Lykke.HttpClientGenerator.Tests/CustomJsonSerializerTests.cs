@@ -34,7 +34,8 @@ namespace Lykke.HttpClientGenerator.Tests
             // act
             var result = await new HttpClientGenerator("http://fake.host", new ICallsWrapper[0],
                     new DelegatingHandler[] { handler },
-                    new JsonSerializerSettings { Converters = new List<JsonConverter> { new CustomJsonConverter() } })
+                    new JsonSerializerSettings { Converters = new List<JsonConverter> { new CustomJsonConverter() } },
+                    null)
                 .Generate<IJsonTestInterface>()
                 .Test();
 
@@ -59,7 +60,8 @@ namespace Lykke.HttpClientGenerator.Tests
             // act
             var result = await new HttpClientGenerator("http://fake.host", new ICallsWrapper[0],
                     new DelegatingHandler[] { handler },
-                    new JsonSerializerSettings { Converters = new List<JsonConverter> { new CustomJsonConverter() } })
+                    new JsonSerializerSettings { Converters = new List<JsonConverter> { new CustomJsonConverter() } },
+                    null)
                 .Generate<IJsonTestInterface>()
                 .TestOnlyOne();
 

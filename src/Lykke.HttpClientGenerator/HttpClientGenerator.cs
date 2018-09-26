@@ -38,13 +38,14 @@ namespace Lykke.HttpClientGenerator
         /// <inheritdoc />
         public HttpClientGenerator(string rootUrl, IEnumerable<ICallsWrapper> callsWrappers,
             IEnumerable<DelegatingHandler> httpDelegatingHandlers)
-            : this(rootUrl, callsWrappers, httpDelegatingHandlers, null)
+            : this(rootUrl, callsWrappers, httpDelegatingHandlers, null, null)
         {
         }
 
         /// <inheritdoc />
         public HttpClientGenerator(string rootUrl, IEnumerable<ICallsWrapper> callsWrappers,
-            IEnumerable<DelegatingHandler> httpDelegatingHandlers, JsonSerializerSettings jsonSerializerSettings)
+            IEnumerable<DelegatingHandler> httpDelegatingHandlers, JsonSerializerSettings jsonSerializerSettings,
+            IUrlParameterFormatter urlParameterFormatter)
         {
             _rootUrl = rootUrl;
             var httpMessageHandler = CreateHttpMessageHandler(httpDelegatingHandlers.ToList().GetEnumerator());
@@ -53,6 +54,10 @@ namespace Lykke.HttpClientGenerator
                 HttpMessageHandlerFactory = () => httpMessageHandler,
                 JsonSerializerSettings = jsonSerializerSettings
             };
+
+            if (urlParameterFormatter != null)
+                _refitSettings.UrlParameterFormatter = urlParameterFormatter;
+
             _wrappers = callsWrappers.ToList();
         }
 

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json;
 using Polly.Caching.Memory;
+using Refit;
 
 namespace Lykke.HttpClientGenerator
 {
@@ -32,6 +33,7 @@ namespace Lykke.HttpClientGenerator
         private List<ICallsWrapper> _additionalCallsWrappers = new List<ICallsWrapper>();
         private List<DelegatingHandler> _additionalDelegatingHandlers = new List<DelegatingHandler>();
         private JsonSerializerSettings _jsonSerializerSettings;
+        private IUrlParameterFormatter _urlParameterFormatter;
 
         /// <summary>
         /// Specifies the value of the api-key header to add to the requests.
@@ -107,11 +109,25 @@ namespace Lykke.HttpClientGenerator
         }
 
         /// <summary>
+        ///     Configure custom <see cref="IUrlParameterFormatter" /> for refit settings.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when <paramref name="urlParameterFormatter" /> is null.
+        /// </exception>
+        public HttpClientGeneratorBuilder WithUrlParameterFormatter(
+            [NotNull] IUrlParameterFormatter urlParameterFormatter)
+        {
+            _urlParameterFormatter =
+                urlParameterFormatter ?? throw new ArgumentNullException(nameof(urlParameterFormatter));
+            return this;
+        }
+
+        /// <summary>
         /// Creates the configured <see cref="HttpClientGenerator"/> instance
         /// </summary>
         public HttpClientGenerator Create()
         {
-            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(null), GetDelegatingHandlers(), _jsonSerializerSettings);
+            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(null), GetDelegatingHandlers(), _jsonSerializerSettings, _urlParameterFormatter);
         }
 
         /// <summary>
@@ -122,7 +138,7 @@ namespace Lykke.HttpClientGenerator
         /// <returns></returns>
         public HttpClientGenerator Create(IClientCacheManager cacheManager)
         {
-            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(cacheManager), GetDelegatingHandlers(), _jsonSerializerSettings);
+            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(cacheManager), GetDelegatingHandlers(), _jsonSerializerSettings, _urlParameterFormatter);
         }
 
         private IEnumerable<DelegatingHandler> GetDelegatingHandlers()
