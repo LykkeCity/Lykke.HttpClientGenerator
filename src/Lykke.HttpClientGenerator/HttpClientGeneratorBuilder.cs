@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using JetBrains.Annotations;
+using Lykke.Common.Log;
 using Lykke.HttpClientGenerator.Caching;
 using Lykke.HttpClientGenerator.Infrastructure;
 using Lykke.HttpClientGenerator.Retries;
@@ -119,6 +120,19 @@ namespace Lykke.HttpClientGenerator
         {
             _urlParameterFormatter =
                 urlParameterFormatter ?? throw new ArgumentNullException(nameof(urlParameterFormatter));
+            return this;
+        }
+
+        /// <summary>
+        /// Configure client to log request and response data if status code of response does not equal 2xx.
+        /// </summary>
+        /// <param name="logFactory">Factory to create instance of <see cref="ILog"/>.</param>
+        /// <returns></returns>
+        public HttpClientGeneratorBuilder WithRequestErrorLogging(
+            [NotNull] ILogFactory logFactory)
+        {
+            var handler = new LogHttpRequestErrorHttpClientHandler(logFactory ?? throw new ArgumentNullException(nameof(logFactory)));
+            _additionalDelegatingHandlers.Add(handler);
             return this;
         }
 
