@@ -32,9 +32,9 @@ namespace Lykke.HttpClientGenerator.Infrastructure
                         request,
                         linkedCts.Token);
                 }
-                catch (OperationCanceledException)
+                catch (OperationCanceledException exception)
                 {
-                    throw new TimeoutException();
+                    throw new TimeoutException("Operation timed out", exception);
                 }
             }
         }

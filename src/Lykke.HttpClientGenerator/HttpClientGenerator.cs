@@ -38,13 +38,6 @@ namespace Lykke.HttpClientGenerator
 
         /// <inheritdoc />
         public HttpClientGenerator(string rootUrl, IEnumerable<ICallsWrapper> callsWrappers,
-            IEnumerable<DelegatingHandler> httpDelegatingHandlers, TimeSpan? timeout = null)
-            : this(rootUrl, callsWrappers, httpDelegatingHandlers, null, null)
-        {
-        }
-
-        /// <inheritdoc />
-        public HttpClientGenerator(string rootUrl, IEnumerable<ICallsWrapper> callsWrappers,
             IEnumerable<DelegatingHandler> httpDelegatingHandlers)
             : this(rootUrl, callsWrappers, httpDelegatingHandlers, null, null)
         {
