@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using Lykke.HttpClientGenerator.Caching;
+﻿using Lykke.HttpClientGenerator.Caching;
 using Lykke.HttpClientGenerator.Infrastructure;
 using Newtonsoft.Json;
 using Refit;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 
 namespace Lykke.HttpClientGenerator
 {
@@ -33,6 +34,13 @@ namespace Lykke.HttpClientGenerator
         public static HttpClientGeneratorBuilder BuildForUrl(string rootUrl)
         {
             return new HttpClientGeneratorBuilder(rootUrl);
+        }
+
+        /// <inheritdoc />
+        public HttpClientGenerator(string rootUrl, IEnumerable<ICallsWrapper> callsWrappers,
+            IEnumerable<DelegatingHandler> httpDelegatingHandlers, TimeSpan? timeout = null)
+            : this(rootUrl, callsWrappers, httpDelegatingHandlers, null, null)
+        {
         }
 
         /// <inheritdoc />
