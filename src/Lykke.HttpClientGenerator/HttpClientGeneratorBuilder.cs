@@ -86,7 +86,7 @@ namespace Lykke.HttpClientGenerator
         /// <summary>
         /// Configures to use timeout.
         /// </summary>
-        /// <exception cref="System.TimeoutException">Throws for any client;s generated method</exception>
+        /// <exception cref="System.TimeoutException">Throws for any client's generated method</exception>
         public HttpClientGeneratorBuilder WithTimeout(TimeSpan timeout)
         {
             _timeout = timeout;

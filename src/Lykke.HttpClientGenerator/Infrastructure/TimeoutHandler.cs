@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Lykke.HttpClientGenerator.Infrastructure
 {
     /// <summary>
-    /// Adds User-Agent header to the request
+    /// Adds timeout to the request
     /// </summary>
     public class TimeoutHandler : DelegatingHandler
     {
