@@ -31,6 +31,7 @@ namespace Lykke.HttpClientGenerator
         [CanBeNull] private string _apiKey;
         [CanBeNull] private IRetryStrategy _retryStrategy = new LinearRetryStrategy();
         [CanBeNull] private ICachingStrategy _cachingStrategy = new AttributeBasedCachingStrategy();
+        [CanBeNull] private TimeSpan? _timeout = null;
         private List<ICallsWrapper> _additionalCallsWrappers = new List<ICallsWrapper>();
         private List<DelegatingHandler> _additionalDelegatingHandlers = new List<DelegatingHandler>();
         private JsonSerializerSettings _jsonSerializerSettings;
@@ -79,6 +80,16 @@ namespace Lykke.HttpClientGenerator
         public HttpClientGeneratorBuilder WithoutCaching()
         {
             _cachingStrategy = null;
+            return this;
+        }
+
+        /// <summary>
+        /// Configures to use timeout.
+        /// </summary>
+        /// <exception cref="System.TimeoutException">Throws for any client's generated method</exception>
+        public HttpClientGeneratorBuilder WithTimeout(TimeSpan timeout)
+        {
+            _timeout = timeout;
             return this;
         }
 
@@ -141,7 +152,11 @@ namespace Lykke.HttpClientGenerator
         /// </summary>
         public HttpClientGenerator Create()
         {
-            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(null), GetDelegatingHandlers(), _jsonSerializerSettings, _urlParameterFormatter);
+            return new HttpClientGenerator(_rootUrl, 
+                GetCallsWrappers(null),
+                GetDelegatingHandlers(),
+                _jsonSerializerSettings, 
+                _urlParameterFormatter);
         }
 
         /// <summary>
@@ -152,11 +167,20 @@ namespace Lykke.HttpClientGenerator
         /// <returns></returns>
         public HttpClientGenerator Create(IClientCacheManager cacheManager)
         {
-            return new HttpClientGenerator(_rootUrl, GetCallsWrappers(cacheManager), GetDelegatingHandlers(), _jsonSerializerSettings, _urlParameterFormatter);
+            return new HttpClientGenerator(_rootUrl,
+                GetCallsWrappers(cacheManager), 
+                GetDelegatingHandlers(), 
+                _jsonSerializerSettings, 
+                _urlParameterFormatter);
         }
 
         private IEnumerable<DelegatingHandler> GetDelegatingHandlers()
         {
+            if (_timeout != null)
+            {
+                yield return new TimeoutHandler(_timeout.Value);
+            }
+
             if (_additionalDelegatingHandlers != null)
             {
                 foreach (var additionalDelegatingHandler in _additionalDelegatingHandlers)

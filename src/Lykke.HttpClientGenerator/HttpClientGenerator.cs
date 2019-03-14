@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using Lykke.HttpClientGenerator.Caching;
+﻿using Lykke.HttpClientGenerator.Caching;
 using Lykke.HttpClientGenerator.Infrastructure;
 using Newtonsoft.Json;
 using Refit;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 
 namespace Lykke.HttpClientGenerator
 {

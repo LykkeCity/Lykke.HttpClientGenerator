@@ -13,4 +13,10 @@ namespace Lykke.HttpClientGenerator.Tests
         [ClientCaching(Minutes = 29)]
         Task<string> TestMethodWithCache();
     }
+
+    public interface IRealInterface
+    {
+        [Get("/")]
+        Task<string> GetHtmlAsync();
+    }
 }
