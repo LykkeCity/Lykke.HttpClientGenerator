@@ -1,6 +1,4 @@
 ﻿using System;
-using FluentAssertions;
-using Lykke.HttpClientGenerator.Infrastructure;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Net;

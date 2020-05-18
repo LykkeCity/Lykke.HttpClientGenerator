@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Polly.Caching;
-using Polly.Caching.Memory;
 using Polly.Utilities;
 
 namespace Lykke.HttpClientGenerator.Caching

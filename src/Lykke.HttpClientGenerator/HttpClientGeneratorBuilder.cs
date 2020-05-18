@@ -9,7 +9,6 @@ using Lykke.HttpClientGenerator.Retries;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.PlatformAbstractions;
 using Newtonsoft.Json;
-using Polly.Caching.Memory;
 using Refit;
 
 namespace Lykke.HttpClientGenerator

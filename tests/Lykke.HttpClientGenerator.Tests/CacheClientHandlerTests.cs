@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -10,11 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Lykke.HttpClientGenerator.Caching;
-using Lykke.HttpClientGenerator.Infrastructure;
-using Lykke.HttpClientGenerator.Retries;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
-using Refit;
 
 namespace Lykke.HttpClientGenerator.Tests
 {
