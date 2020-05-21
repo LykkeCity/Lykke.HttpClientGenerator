@@ -3,13 +3,13 @@ using System.Reflection;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Lykke.Common.Api.Contract.Responses;
-using Lykke.Common.ApiLibrary.Exceptions;
+using Lykke.HttpClientGenerator.Exceptions;
 using Refit;
 
 namespace Lykke.HttpClientGenerator.Infrastructure
 {
     /// <summary>
-    /// Calls wrapper to handle refit ApiException and throw ClientApiException (with HttpStatusCode and ErrorResponse) instead
+    /// Calls wrapper to handle refit ApiException and throw HttpClientApiException (with HttpStatusCode and ErrorResponse) instead
     /// </summary>
     [PublicAPI]
     public class ExceptionHandlerCallsWrapper : ICallsWrapper
@@ -26,7 +26,7 @@ namespace Lykke.HttpClientGenerator.Infrastructure
                 var errResponse = ex.GetContentAs<ErrorResponse>();
 
                 if (errResponse != null)
-                    throw new ClientApiException(ex.StatusCode, errResponse);
+                    throw new HttpClientApiException(ex.StatusCode, errResponse);
 
                 throw;
             }
