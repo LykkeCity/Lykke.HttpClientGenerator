@@ -3,10 +3,7 @@ using System.Reflection;
 
 namespace Lykke.HttpClientGenerator
 {
-    /// <summary>
-    /// Extension methods for <see cref="Exception"/> 
-    /// </summary>
-    public static class ExceptionExtensions
+    internal static class ExceptionExtensions
     {
         private static readonly FieldInfo ExceptionMessageField =
             typeof(Exception).GetField("_message", BindingFlags.Instance | BindingFlags.NonPublic);
