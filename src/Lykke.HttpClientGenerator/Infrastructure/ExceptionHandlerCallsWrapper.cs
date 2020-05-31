@@ -26,7 +26,14 @@ namespace Lykke.HttpClientGenerator.Infrastructure
                 var errResponse = ex.GetContentAs<ErrorResponse>();
 
                 if (errResponse != null)
+                {
+                    if (errResponse.ErrorMessage == null)
+                    {
+                        errResponse.ErrorMessage = ex.Content;
+                    }
+
                     throw new HttpClientApiException(ex.StatusCode, errResponse);
+                }
 
                 throw;
             }
