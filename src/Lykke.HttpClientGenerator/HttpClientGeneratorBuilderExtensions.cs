@@ -33,6 +33,17 @@ namespace Lykke.HttpClientGenerator
         {
             return AttachCallsWrapper<T>(builder, serviceName, showReason);
         }
+        
+        /// <summary>
+        /// Optionally use api key if provided
+        /// </summary>
+        /// <param name="builder">The builder for the service</param>
+        /// <param name="apiKey">The api key to access the service</param>
+        /// <returns></returns>
+        public static HttpClientGeneratorBuilder WithOptionalApiKey(this HttpClientGeneratorBuilder builder, string apiKey)
+        {
+            return !string.IsNullOrWhiteSpace(apiKey) ? builder.WithApiKey(apiKey) : builder;
+        }
 
         private static HttpClientGeneratorBuilder AttachCallsWrapper<TApiError>(
             HttpClientGeneratorBuilder builder,
