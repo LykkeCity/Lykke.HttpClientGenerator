@@ -1,4 +1,5 @@
-﻿using Lykke.HttpClientGenerator.Caching;
+﻿using System;
+using Lykke.HttpClientGenerator.Caching;
 using Lykke.HttpClientGenerator.Infrastructure;
 using Newtonsoft.Json;
 using Refit;
@@ -67,6 +68,17 @@ namespace Lykke.HttpClientGenerator
         public TInterface Generate<TInterface>()
         {
             return WrapIfNeeded(RestService.For<TInterface>(_rootUrl, _refitSettings));
+        }
+
+        public TInterface Generate<TInterface>(TimeSpan timeout)
+        {
+            var client = new HttpClient()
+            {
+                BaseAddress = new Uri(_rootUrl),
+                Timeout = timeout
+            };
+
+            return WrapIfNeeded(RestService.For<TInterface>(client, _refitSettings));
         }
 
         /// <summary>

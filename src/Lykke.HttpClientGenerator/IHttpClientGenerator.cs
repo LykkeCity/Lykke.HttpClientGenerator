@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace Lykke.HttpClientGenerator
 {
@@ -12,5 +13,7 @@ namespace Lykke.HttpClientGenerator
         /// Generates the proxy
         /// </summary>
         TInterface Generate<TInterface>();
+
+        TInterface Generate<TInterface>(TimeSpan timeout);
     }
 }
