@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -87,7 +88,7 @@ namespace Lykke.HttpClientGenerator.Tests
             _suffix = suffix ?? string.Empty;
         }
 
-        public string Format(object value, ParameterInfo parameterInfo)
+        public string Format(object value, ICustomAttributeProvider attributeProvider, Type type)
         {
             return string.Concat(value, '_', _suffix);
         }
