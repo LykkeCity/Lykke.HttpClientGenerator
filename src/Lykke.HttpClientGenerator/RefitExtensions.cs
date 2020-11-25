@@ -20,24 +20,25 @@ namespace Lykke.HttpClientGenerator
         /// <returns></returns>
         public static async Task WithExceptionDetailsAsync(Func<Task> action, ILogger logger, RefitExceptionHandlingOptions options = null)
         {
-            options ??= RefitExceptionHandlingOptions.CreateDefault();
-            
             try
             {
                 await action();
             }
             catch (ValidationApiException e)
             {
+                options ??= RefitExceptionHandlingOptions.CreateDefault();
                 logger.LogError(e, e.GetDescription());
                 if (options.ReThrow) throw;
             }
             catch (ApiException e)
             {
+                options ??= RefitExceptionHandlingOptions.CreateDefault();
                 logger.LogError(e, e.GetDescription());
                 if (options.ReThrow) throw;
             }
             catch (HttpClientApiException e)
             {
+                options ??= RefitExceptionHandlingOptions.CreateDefault();
                 logger.LogError(e, e.GetDescription());
                 if (options.ReThrow) throw;
             }
