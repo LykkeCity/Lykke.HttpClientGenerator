@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Refit;
 
 namespace Lykke.HttpClientGenerator.Exceptions
 {
@@ -36,25 +35,7 @@ namespace Lykke.HttpClientGenerator.Exceptions
         /// <returns></returns>
         public async Task Invoke(HttpContext context)
         {
-            try
-            {
-                await _next(context);
-            }
-            catch (ValidationApiException e)
-            {
-                _logger.LogError(e, e.GetDescription());
-                if (_options.ReThrow) throw;
-            }
-            catch (ApiException e)
-            {
-                _logger.LogError(e, e.GetDescription());
-                if (_options.ReThrow) throw;
-            }
-            catch (HttpClientApiException e)
-            {
-                _logger.LogError(e, e.GetDescription());
-                if (_options.ReThrow) throw;
-            }
+            await RefitExtensions.WithExceptionDetailsAsync(() => _next(context), _logger, _options);
         }
     }
 }

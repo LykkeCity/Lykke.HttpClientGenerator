@@ -16,7 +16,7 @@ namespace Lykke.HttpClientGenerator
         /// <returns></returns>
         public static string GetProblemDetailsPhrase(this ValidationApiException exception)
         {
-            return exception.HasContent ? $"Problem details: {exception.Content.ToJson()}." : string.Empty;
+            return exception.Content != null ? $"Problem details: {exception.Content.ToJson()}." : string.Empty;
         }
 
         /// <summary>

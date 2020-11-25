@@ -25,7 +25,7 @@ namespace Lykke.HttpClientGenerator
         /// <returns></returns>
         public static string GetContentPhrase(this ApiException exception)
         {
-            return  exception.HasContent ? $"Content: {exception.Content.ToJson()}." : string.Empty;
+            return exception.Content != null ? $"Content: {exception.Content.ToJson()}." : string.Empty;
         }
 
         /// <summary>
