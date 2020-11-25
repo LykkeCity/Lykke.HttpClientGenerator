@@ -1,0 +1,19 @@
+name: publish to nuget
+on:
+  push:
+    tags: "*"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
+    - name: Create the package
+      run: dotnet pack --include-symbols --include-source --configuration Release src/Lykke.HttpClientGenerator /p:Version=${GITHUB_REF#refs/tags/}
+    - name: Publish the package to Nuget
+      run: dotnet nuget push src/Lykke.HttpClientGenerator/bin/Release/*.nupkg -s "https://api.nuget.org/v3/index.json" -k ${{ secrets.NUGET_TOCKEN }}
