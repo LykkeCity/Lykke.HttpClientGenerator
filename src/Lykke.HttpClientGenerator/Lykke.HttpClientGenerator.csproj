@@ -12,6 +12,7 @@
             User logic can also be added as wrappers to the requests or to the method calls.
         </Description>
     <PackageTags>refit;polly;dotnet-core;csharp;api-client</PackageTags>
+    <PackageId>LykkeBiz.HttpClientGenerator</PackageId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="5.2.0" />
