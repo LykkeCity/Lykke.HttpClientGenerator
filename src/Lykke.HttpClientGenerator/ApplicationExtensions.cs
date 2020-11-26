@@ -15,7 +15,7 @@ namespace Lykke.HttpClientGenerator
         /// <param name="app"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public static IApplicationBuilder AddRefitExceptionHandler(this IApplicationBuilder app, Action<RefitExceptionHandlingOptions> configure)
+        public static IApplicationBuilder AddRefitExceptionHandler(this IApplicationBuilder app, Action<RefitExceptionHandlingOptions> configure = null)
         {
             var options = RefitExceptionHandlingOptions.CreateDefault();
 
