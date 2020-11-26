@@ -10,12 +10,12 @@ namespace Lykke.HttpClientGenerator
     public static class ApplicationExtensions
     {
         /// <summary>
-        /// Adds refit exceptions handling middleware
+        /// Uses refit exceptions handling middleware
         /// </summary>
         /// <param name="app"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public static IApplicationBuilder AddRefitExceptionHandler(this IApplicationBuilder app, Action<RefitExceptionHandlingOptions> configure = null)
+        public static IApplicationBuilder UseRefitExceptionHandler(this IApplicationBuilder app, Action<RefitExceptionHandlingOptions> configure = null)
         {
             var options = RefitExceptionHandlingOptions.CreateDefault();
 
