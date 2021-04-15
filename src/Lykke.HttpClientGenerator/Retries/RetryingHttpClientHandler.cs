@@ -20,7 +20,7 @@ namespace Lykke.HttpClientGenerator.Retries
             HttpStatusCode.GatewayTimeout, HttpStatusCode.RequestTimeout,
         };
         
-        private readonly RetryPolicy _retryPolicy;
+        private readonly AsyncRetryPolicy _retryPolicy;
 
         /// <inheritdoc />
         public RetryingHttpClientHandler([NotNull] IRetryStrategy retryStrategy)

@@ -13,8 +13,7 @@ namespace Lykke.HttpClientGenerator.Caching
 
         public RemovableAsyncCacheProvider(IMemoryCache memoryCache)
         {
-            if (memoryCache == null) throw new ArgumentNullException(nameof(memoryCache));
-            _cache = memoryCache;
+            _cache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
         }
 
         public object Get(String key)
@@ -60,7 +59,16 @@ namespace Lykke.HttpClientGenerator.Caching
         {
             cancellationToken.ThrowIfCancellationRequested();
 
-            return TaskHelper.FromResult(Get(key));
+            return Task.FromResult(Get(key));
+        }
+
+        public async Task<(bool, object)> TryGetAsync(string key, CancellationToken cancellationToken, bool continueOnCapturedContext)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var result = await GetAsync(key, cancellationToken, continueOnCapturedContext);
+            
+            return result == null ? (false, null) : (true, result);
         }
 
         public Task PutAsync(string key, object value, Ttl ttl, CancellationToken cancellationToken, bool continueOnCapturedContext)
