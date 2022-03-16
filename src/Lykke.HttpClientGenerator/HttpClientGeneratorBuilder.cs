@@ -34,7 +34,7 @@ namespace Lykke.HttpClientGenerator
         private List<ICallsWrapper> _additionalCallsWrappers = new List<ICallsWrapper>();
         private List<DelegatingHandler> _additionalDelegatingHandlers = new List<DelegatingHandler>();
         private JsonSerializerSettings _jsonSerializerSettings;
-        private IUrlParameterFormatter _urlParameterFormatter;
+        private IUrlParameterFormatter _urlParameterFormatter = new LykkeDefaultUrlParameterFormatter();
 
         /// <summary>
         /// Specifies the value of the api-key header to add to the requests.
