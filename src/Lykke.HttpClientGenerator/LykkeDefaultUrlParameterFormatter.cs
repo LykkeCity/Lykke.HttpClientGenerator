@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using Common;
 using Lykke.Snow.Common.Extensions;
 using Refit;
 
@@ -18,14 +19,7 @@ namespace Lykke.HttpClientGenerator
 
                 if (queryAttribute == null)
                 {
-                    if (parameterValue != null)
-                    {
-                        return ((DateTime) parameterValue)
-                            .AssumeUtcIfUnspecified()
-                            .ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
-                    }
-
-                    return null;
+                    return ((DateTime?) parameterValue).ToIso8601Format();
                 }
             }
 
