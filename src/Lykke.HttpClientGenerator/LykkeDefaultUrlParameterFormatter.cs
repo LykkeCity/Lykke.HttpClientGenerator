@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using Common;
 using Lykke.Snow.Common.Extensions;
 using Refit;
 
@@ -13,11 +12,12 @@ namespace Lykke.HttpClientGenerator
         {
             if (type == typeof(DateTime) || type == typeof(DateTime?))
             {
-                var queryAttribute = attributeProvider.GetCustomAttributes(typeof(QueryAttribute), true)
+                // See if we have a format
+                var formatString = attributeProvider.GetCustomAttributes(typeof(QueryAttribute), true)
                     .OfType<QueryAttribute>()
-                    .FirstOrDefault();
+                    .FirstOrDefault()?.Format;
 
-                if (queryAttribute == null)
+                if (string.IsNullOrWhiteSpace(formatString))
                 {
                     return ((DateTime?) parameterValue).ToIso8601Format();
                 }
