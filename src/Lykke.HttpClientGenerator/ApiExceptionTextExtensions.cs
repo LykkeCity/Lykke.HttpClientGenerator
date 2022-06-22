@@ -19,16 +19,10 @@ namespace Lykke.HttpClientGenerator
             {
                 return string.Empty;
             }
+
+            var requestLogModel = exception.RequestMessage.ToLogModel();
             
-            var requestDataToText = new
-            {
-                exception.RequestMessage.Version,
-                exception.RequestMessage.Content,
-                exception.RequestMessage.RequestUri,
-                exception.RequestMessage.Method
-            };
-            
-            return $"Request: {requestDataToText.ToJson()}.";   
+            return $"Request: {requestLogModel.ToJson()}.";   
         }
 
         /// <summary>
