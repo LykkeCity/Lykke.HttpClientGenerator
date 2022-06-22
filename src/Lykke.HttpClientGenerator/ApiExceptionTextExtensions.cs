@@ -9,13 +9,26 @@ namespace Lykke.HttpClientGenerator
     public static class ApiExceptionTextExtensions
     {
         /// <summary>
-        /// Get http request caused the exception as text
+        /// Get http request caused the exception as text, except for the headers
         /// </summary>
         /// <param name="exception"></param>
         /// <returns></returns>
         public static string GetRequestPhrase(this ApiException exception)
         {
-            return exception.RequestMessage == null ? string.Empty : $"Request: {exception.RequestMessage.ToJson()}.";   
+            if (exception.RequestMessage == null)
+            {
+                return string.Empty;
+            }
+            
+            var requestDataToText = new
+            {
+                exception.RequestMessage.Version,
+                exception.RequestMessage.Content,
+                exception.RequestMessage.RequestUri,
+                exception.RequestMessage.Method
+            };
+            
+            return $"Request: {requestDataToText.ToJson()}.";   
         }
 
         /// <summary>
