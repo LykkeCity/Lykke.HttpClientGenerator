@@ -2,12 +2,21 @@ using Lykke.HttpClientGenerator.Retries;
 
 namespace Lykke.HttpClientGenerator.TestClient
 {
-    public class LoggedExponentialRetryStrategy : ExponentialRetryStrategy
+    public class LoggedExponentialRetryStrategy : IRetryStrategy
     {
-        public override TimeSpan GetRetrySleepDuration(int retryAttempt, string url)
+        private readonly ExponentialRetryStrategy _strategy;
+
+        public LoggedExponentialRetryStrategy(ExponentialRetryStrategy strategy)
+        {
+            _strategy = strategy;
+        }
+
+        public TimeSpan GetRetrySleepDuration(int retryAttempt, string url)
         {
             Console.WriteLine($"Attempt {retryAttempt}, url {url}");
-            return base.GetRetrySleepDuration(retryAttempt, url);
+            return _strategy.GetRetrySleepDuration(retryAttempt, url);
         }
+
+        public int RetryAttemptsCount => _strategy.RetryAttemptsCount;
     }
 }
