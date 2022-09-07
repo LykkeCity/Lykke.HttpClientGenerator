@@ -35,7 +35,7 @@ namespace Lykke.HttpClientGenerator.Retries
         public int RetryAttemptsCount { get; }
 
         /// <inheritdoc />
-        public TimeSpan GetRetrySleepDuration(int retryAttempt, string url)
+        public virtual TimeSpan GetRetrySleepDuration(int retryAttempt, string url)
         {
             return TimeSpan.FromSeconds(Math.Min(_maxRetrySleepDuration.TotalSeconds, Math.Pow(_exponentBase, retryAttempt)));
         }

@@ -4,6 +4,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lykke.HttpClientGenerator",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lykke.HttpClientGenerator.Tests", "tests\Lykke.HttpClientGenerator.Tests\Lykke.HttpClientGenerator.Tests.csproj", "{8C630CD3-918C-48D7-9FA5-F26FB596C9E2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lykke.HttpClientGenerator.TestWebService", "src\Lykke.HttpClientGenerator.TestWebService\Lykke.HttpClientGenerator.TestWebService.csproj", "{A186201E-49C5-48EA-9C70-2B7204C05DB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lykke.HttpClientGenerator.TestWebService.Contracts", "src\Lykke.HttpClientGenerator.TestWebService.Contracts\Lykke.HttpClientGenerator.TestWebService.Contracts.csproj", "{D7BB797C-EAA7-4137-9A72-5AABE95EA5F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lykke.HttpClientGenerator.TestClient", "src\Lykke.HttpClientGenerator.TestClient\Lykke.HttpClientGenerator.TestClient.csproj", "{A3F5A2A2-3E09-4C4C-990A-245DDF434A01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +24,17 @@ Global
 		{8C630CD3-918C-48D7-9FA5-F26FB596C9E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C630CD3-918C-48D7-9FA5-F26FB596C9E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C630CD3-918C-48D7-9FA5-F26FB596C9E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A186201E-49C5-48EA-9C70-2B7204C05DB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A186201E-49C5-48EA-9C70-2B7204C05DB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A186201E-49C5-48EA-9C70-2B7204C05DB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A186201E-49C5-48EA-9C70-2B7204C05DB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7BB797C-EAA7-4137-9A72-5AABE95EA5F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7BB797C-EAA7-4137-9A72-5AABE95EA5F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7BB797C-EAA7-4137-9A72-5AABE95EA5F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7BB797C-EAA7-4137-9A72-5AABE95EA5F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3F5A2A2-3E09-4C4C-990A-245DDF434A01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3F5A2A2-3E09-4C4C-990A-245DDF434A01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3F5A2A2-3E09-4C4C-990A-245DDF434A01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3F5A2A2-3E09-4C4C-990A-245DDF434A01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
