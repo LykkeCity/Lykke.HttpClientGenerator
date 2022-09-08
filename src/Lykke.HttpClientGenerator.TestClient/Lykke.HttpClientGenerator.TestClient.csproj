@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+      <PackageReference Include="Refit" Version="5.2.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Lykke.HttpClientGenerator.TestWebService.Contracts\Lykke.HttpClientGenerator.TestWebService.Contracts.csproj" />
+      <ProjectReference Include="..\Lykke.HttpClientGenerator\Lykke.HttpClientGenerator.csproj" />
+    </ItemGroup>
+
+</Project>
