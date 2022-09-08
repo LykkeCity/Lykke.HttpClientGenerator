@@ -1,8 +1,7 @@
 name: Publish to nuget
 on:
   push:
-    # tags like 5.0.0 are allowed, tags like 4.0.0 are not
-    tags: '*'
+    tags: '5.*.*'
 jobs:
   build:
     runs-on: ubuntu-latest
