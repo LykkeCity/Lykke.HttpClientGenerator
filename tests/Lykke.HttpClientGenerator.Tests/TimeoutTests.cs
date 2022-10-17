@@ -13,7 +13,7 @@ namespace Lykke.HttpClientGenerator.Tests
     public class TimeoutTests
     {
         [Test]
-        public async Task RequestTimeout_IgnoresRetryPolicy()
+        public void RequestTimeout_IgnoresRetryPolicy()
         {
             // arrange
             var log = new List<string>();
